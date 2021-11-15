@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Zadanie4_Plarium
 {
-    class Date
+    class Date//класс даты
     {
-        private Year _year;
-        private Mounth _mounth;
-        private Day _day;
-     
+        private Year _year;//вложенный класс года
+        private Mounth _mounth;//вложенный класс месяца
+        private Day _day;//вложенный класс дня
+
 
         public Date(int day, int month, int year)
         {
@@ -19,18 +19,18 @@ namespace Zadanie4_Plarium
             _mounth = new Mounth(month);
             _day = new Day(day);
         }
-        public DayOfWeek getDayOfWeek()
+        public DayOfWeek getDayOfWeek()//получить день недели
         {
             int NumMonth = _mounth.NumMounth == 4 || _mounth.NumMounth == 7 ? 0 : _mounth.NumMounth == 1 || _mounth.NumMounth == 10 ? 1 : _mounth.NumMounth == 5  ? 2 : _mounth.NumMounth == 8 ? 3 : _mounth.NumMounth == 6 ? 5 : _mounth.NumMounth == 12 || _mounth.NumMounth == 9 ? 6 : 4;
             int NumYear = (6 + _year.NumYear % 100 + (_year.NumYear % 100) / 4) % 7;
             int day = (_day.NumDay + NumMonth + NumYear) % 7;
             return (DayOfWeek)day;
         }
-        public int getDayOfYear()
+        public int getDayOfYear()//сколько дней в году
         {
             return _year.leap ? 366 : 365;
         }
-        public int daysBetween(Date date)
+        public int daysBetween(Date date)//дней между датами
         {
             DateTime date1 = new DateTime(_year.NumYear, _mounth.NumMounth, _day.NumDay);
             DateTime date2 = new DateTime(date._year.NumYear, date._mounth.NumMounth, date._day.NumDay);
@@ -39,11 +39,11 @@ namespace Zadanie4_Plarium
            else return (int)(date1 - date2).TotalDays;
         }
         
-        /*************************/
-        public class Year
+        /*вложенные классы*/
+        public class Year//класс года
         {
-            public int NumYear { get; }
-            public bool leap;
+            public int NumYear { get; }//год
+            public bool leap;//високосность
             public Year(int year)
             {
                 NumYear = year;
@@ -52,14 +52,14 @@ namespace Zadanie4_Plarium
             }
         }
 
-        public class Mounth
+        public class Mounth//месяц
         {
-            public int NumMounth { get; }
+            public int NumMounth { get; }//число 
             public Mounth(int mounth)
             {
                 NumMounth = mounth;
             }
-            public int getDays(int monthNumber, bool leapYear)
+            public int getDays(int monthNumber, bool leapYear)//подсчет дней в месяце
             {
                 if (leapYear && monthNumber == 2)
                     return (29);
@@ -68,13 +68,13 @@ namespace Zadanie4_Plarium
 
             }
         }
-        public static DayOfWeek valueOf(int index)
+        public static DayOfWeek valueOf(int index)//получение дня недели
                 {
            
             return (DayOfWeek)index;
                 }   
         
-        public enum DayOfWeek
+        public enum DayOfWeek//перечисление дней недели
         {
             Saturday,
             Sunday,
@@ -85,9 +85,9 @@ namespace Zadanie4_Plarium
             Friday
         }
 
-        public class Day
+        public class Day//день
         {
-            public int NumDay { get; }
+            public int NumDay { get; }//число
             public Day(int day)
             {
                 NumDay = day;

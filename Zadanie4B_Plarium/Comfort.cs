@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zadanie4B_Plarium
 {
-    interface Comfort
+    interface Comfort//интерфейс комфорта
     {
         int GetLvlComfort();
     }

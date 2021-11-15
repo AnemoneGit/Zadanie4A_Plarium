@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Zadanie4B_Plarium
 {
-    class PassTrain
+    class PassTrain//класс поезда
     {
-       private SortedList<int, Train> Vagonss = new SortedList<int, Train>();
+       private List< Vagons> Vagonss = new List< Vagons>();//список вагонов
 
-        public PassTrain()
+        public PassTrain()//тут будут создаваться вагоны
         {
             Random rnd = new Random();
             int i;
@@ -21,11 +21,14 @@ namespace Zadanie4B_Plarium
             }
             while (i != 0)
             {
-                Train train = new Train(rnd.Next(1, 100), rnd.Next(1, 100));
+                Vagons train;
+                if (rnd.Next(0,2)==0)
+                 train = new PassVagon(rnd.Next(1, 100), rnd.Next(1, 100));
+                else  train = new VagonRestoran(rnd.Next(1, 100), rnd.Next(1, 100));
                 train.Number = i;
                 try 
                 { 
-                   Vagonss.Add(train.GetLvlComfort(),train);
+                   Vagonss.Add(train);
                     i--;
                 }
                 catch
@@ -37,21 +40,21 @@ namespace Zadanie4B_Plarium
             }
         }
 
-        public void GetOll()
+        public void GetOll()//метод считает количество багажа и пассажиров
         {
-            ICollection<int> keys = Vagonss.Keys;
+         
             int ollP = 0, ollB=0;
 
             
-            foreach (int s in keys)
+            foreach (Vagons s in Vagonss)
             {
-                ollP += Vagonss[s].CountPass;
-                ollB += Vagonss[s].CountBaggaj;
+                ollP += s.CountPass;
+                ollB += s.CountBaggaj;
             }
             Console.WriteLine($"всего {ollP} пассажиров и {ollB} багажа");
          
         }
-        public void GetVagon()
+        public void GetVagon()//получаем интересующий нас вагон
         {
             int i,j;
             Console.WriteLine($"Введите первый параметр");
@@ -65,22 +68,24 @@ namespace Zadanie4B_Plarium
             {
                 Console.WriteLine("Ошибка ввода! Введите число");
             }
-            ICollection<int> keys = Vagonss.Keys;
+            
  
-            foreach (int s in keys)
+            foreach (Vagons s in Vagonss)
             {
-               if(Vagonss[s].Test(i,j))
-                    Console.WriteLine($"вагон с номером {Vagonss[s].Number} имеет заданное количество пассажиров");
+               if(s.Test(i,j))
+                    Console.WriteLine($"{s.GetInfo()} с номером {s.Number} имеет заданное количество пассажиров");
             }
             
         }
-        public override string ToString()
+        public override string ToString()//переопределенный метод ToString который реализует сортировку
         {
-            ICollection<int> keys = Vagonss.Keys;
+            var result = from vag in Vagonss
+                         orderby vag.lvl
+                         select vag;
             string si= "упорядоченный список вагонов по комфортности \n";
-            foreach (int s in keys)
+            foreach (Vagons s in result)
             {
-                si += $"вагон с номером {Vagonss[s].Number} имеет комфортность {s}\n";
+                si += $"{s.GetInfo()} с номером {s.Number} имеет комфортность {s.GetLvlComfort()}\n";
                     
             }
             return si;
